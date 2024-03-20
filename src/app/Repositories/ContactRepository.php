@@ -2,18 +2,41 @@
 namespace App\Repositories;
 
 use App\Models\Contact;
+use App\Repositories\ContactRepositoryInterface;
 
-class ContactRepository
-{
-    public static function findAllContact(){
+class ContactRepository implements ContactRepositoryInterface{
 
-        $contact = Contact::from('contacts')
-                    ->select('contacts.*')
-                    ->orderBy('contacts.id', 'ASC');
+    /**
+     * @inheritDoc
+     */
+    public function storeContact(int $department_id, string $name, string $email, string $content, int $age, int $gender)
+    {
+        return Contact::create(
+            [
+                'department_id' => $department_id,
+                'name' => $name,
+                'email' => $email,
+                'content' => $content,
+                'age' => $age,
+                'gender' => $gender,
+            ]);
+    }
 
-        return $contact;
+    /**
+     * @inheritDoc
+     */
+    public function getContactsAll()
+    {
+        return Contact::select('department_id', 'name', 'email', 'content')->get();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDepartmentsName()
+    {
+        return Department::select('department_id', 'name')->get();
     }
 
 }
-
 ?>
