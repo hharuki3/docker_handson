@@ -4,34 +4,37 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Services\ContactService;
+use Illuminate\Http\Response;
+use App\Services\ContactServiceInterface;
 
 class ContactController extends Controller
 {
 
-    
+    protected $contactService;
+
+    public function __construct(ContactServiceInterface $contactService)
+    {
+        $this->contactService = $contactService;
+    }
+
     /**
      * お問い合わせ内容を一覧取得するメソッド
      */
     public function index(){
-        $contact =
-
-        return view('createContact');
+        $contact = $this->contactService->getContacts();
+        return response()->view('contacts.index', $contact);
+        // return view('createContact');
     }
-
 
     /**
-     * getContacts
-     * お問い合わせ情報を一覧取得する
+     * お問い合わせ画面を作成するメソッド
+     *
+     * @param
      */
-    public function getContacts(){
-
-        $service = new ContactService;
-
-        $contacts = ContactService::getContactList();
-
-        return $contacts;
+    public function createContactDisplay(){
+        $departments = $this->contactService->getDepartments();
     }
+
 
 
 }
